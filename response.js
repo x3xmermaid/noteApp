@@ -1,11 +1,31 @@
 'use strict'
 
-exports.test = function (values, res){
-    const testData = {
-        status: 500,
-        nama: "Mermaid",
-        values: values,
+exports.insertTrue = function (values, res){
+    const message = {
+        error: "False",
+        row: values,
+        Message: "data Has Been Created"
     }
-    res.json(testData);
+    res.json(message);
+    res.end;
+}
+
+exports.updateTrue = function (values, res){
+    const message = {
+        error: "False",
+        row: values,
+        Message: "data Has Been updated"
+    }
+    res.json(message);
+    res.end;
+}
+
+exports.deleteTrue = function (values, res){
+    const message = {
+        error: "False",
+        row: values,
+        Message: "data Has Been deleted"
+    }
+    res.json(message);
     res.end;
 }

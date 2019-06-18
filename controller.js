@@ -3,7 +3,7 @@
 const con = require('./connection');
 const resp = require('./response')
 
-exports.show = function(req, res){
+exports.show = function(req, res, next){
     con.query(
         `SELECT * FROM data`,
         function(error, rows, field){
@@ -17,7 +17,7 @@ exports.show = function(req, res){
     )
 }
 
-exports.insert = function(req, res){
+exports.insert = function(req, res, next){
     let Title = req.body.title;
     let Note = req.body.note;
     let ID_category = req.body.idCategory;
@@ -28,17 +28,13 @@ exports.insert = function(req, res){
             if(error){
                 throw error;
             }else{
-                return res.send({
-                    error: false,
-                    data: rows,
-                    message: "Data has been created",
-                })
+                return res.send(resp.insertTrue(rows, res))
             }
         }
     )
 }
 
-exports.update = function(req, res){
+exports.update = function(req, res, next){
     let Title = req.body.title;
     let Note = req.body.note;
     let ID_category = req.body.idCategory;
@@ -50,17 +46,13 @@ exports.update = function(req, res){
             if(error){
                 throw error;
             }else{
-                return res.send({
-                    error: false,
-                    data: rows,
-                    message: "data has been updated",
-                })
+                return res.send(resp.updateTrue(rows, res))
             }
         }
     )
 }
 
-exports.delete = function(req, res){
+exports.delete = function(req, res, next){
     let Id = req.body.id;
     con.query(
         `DELETE FROM data where id=?`,
@@ -69,11 +61,7 @@ exports.delete = function(req, res){
             if (error){
                 throw error;
             }else{
-                return res.send({
-                    error: false,
-                    data: rows,
-                    message: "data has been deleted"
-                })
+                return res.send(resp.deleteTrue(rows, res))
             }
         }
     )
