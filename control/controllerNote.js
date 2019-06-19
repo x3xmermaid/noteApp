@@ -8,13 +8,17 @@ const resp = require('../response')
 
 exports.show = function(req, res, next){
     let sql = `SELECT d.id, title, note, time, C.category FROM data as d inner join category as C on d.id_category=C.id`
+    let allSql = [sql];
     let parameter =[];
-    let sqlPage = ``
-    let parameterPage = [];
-    let sqlTitle = ``
-    let parameterTitle = [] 
-    let sqlSort = ``
-    let parameterSort = []
+    
+    if((req.query.title)){
+        allSql.push(`where title=?`)
+        parameter.push(req.query.title)   
+    }
+    
+    if((req.query.sorting)){
+         allSql.push(`order by id ` + req.query.sorting)
+    }
 
     if((req.query.page)){
         if(!(req.query.count)){
@@ -22,28 +26,11 @@ exports.show = function(req, res, next){
         }
         let offset = (req.query.page - 1) * req.query.count;
         let count = parseInt(req.query.count, 10);
-        sqlPage = `limit ?, ?`
-        parameterPage = [offset, count]  
+        allSql.push(`limit ?, ?`) 
+        parameter.push(offset, count);  
     }
 
-    if((req.query.title)){
-        sqlTitle = `where title=?`
-        parameterTitle = [req.query.title]       
-    }
-
-    if((req.query.sorting)){
-        if(req.query.sorting === 'desc'){
-            sqlSort = `order by id DESC`
-        }else
-            sqlSort = `order by id ASC`  
-    }
-
-    let allSql = [sql, sqlTitle , sqlSort, sqlPage];
     allSql = allSql.join(' ');
-    // console.log(allSql)
-    Array.prototype.push.apply(parameter, parameterTitle);
-    // Array.prototype.push.apply(parameter, parameterSort);
-    Array.prototype.push.apply(parameter, parameterPage);
     con.query(allSql, parameter , 
             function(error, rows, field){
                 if(error){
