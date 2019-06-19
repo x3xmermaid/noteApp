@@ -1,20 +1,38 @@
 'use strict'
 
-const con = require('./connection');
-const resp = require('./response')
+const con = require('../connection');
+const resp = require('../response')
 
 exports.show = function(req, res, next){
-    con.query(
-        `SELECT * FROM data`,
-        function(error, rows, field){
-            if(error){
-                throw error;
-            }else{
-                res.json(rows);
-                res.end;
-            }
-        }
-    )
+    if(req.params.id === '0'){
+        con.query(
+                `SELECT d.id, title, note, time, C.category FROM data as d inner join category as C on d.id_category=C.id`,
+                function(error, rows, field){
+                    if(error){
+                        throw error;
+                    }else{
+                        res.json(rows);
+                        res.end;
+                    }
+                }
+        )
+    }else{
+        con.query(
+                `SELECT * FROM data where id=?`,
+                [req.params.id],
+                function(error, rows, field){
+                    if(error){
+                        throw error;
+                    }else{
+                        res.json(rows);
+                        res.end;
+                    }
+                }
+        )
+    }
+    // var dataxxxx =console.log(req.params.id);
+    //     // next();
+    //     res.end
 }
 
 exports.insert = function(req, res, next){
@@ -32,6 +50,7 @@ exports.insert = function(req, res, next){
             }
         }
     )
+    next()
 }
 
 exports.update = function(req, res, next){
@@ -50,6 +69,7 @@ exports.update = function(req, res, next){
             }
         }
     )
+    next()
 }
 
 exports.delete = function(req, res, next){
@@ -65,4 +85,5 @@ exports.delete = function(req, res, next){
             }
         }
     )
+    next()
 }

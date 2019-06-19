@@ -1,14 +1,37 @@
 'use strict'
 
 module.exports = function (app) {
-    const controller = require('./controller')
+    const controlNote = require('./control/controllerNote')
+    const controlCategory = require('./control/controllerCategory')
 
     // GET
-    app.get('/show', controller.show);
+    // app.get('/show/:id', function(req, res, next){
+    //     if(req.params.id === '1'){
+    //         app.get('/show/0', controller.show);
+    //     }
+    //     next();
+    // }, function(req, res, next){
+    //         // next(controller.show);
+    //     console.log('aaaa');
+    //     next();
+    // })
+    // NOTE
+    // GET
+    app.get('/note/:id', controlNote.show);
     // POST
-    app.post('/insert', controller.insert);
+    app.post('/note', controlNote.insert);
     // PATCH
-    app.patch('/update', controller.update);
+    app.patch('/note', controlNote.update);
     // DELETE
-    app.delete('/delete', controller.delete);
+    app.delete('/note', controlNote.delete);
+    
+    // Category
+    // GET
+    app.get('/category', controlCategory.show);
+    // POST
+    app.post('/category', controlCategory.insert);
+    // PATCH
+    app.patch('/category', controlCategory.update);
+    // DELETE
+    app.delete('/category', controlCategory.delete);
 }
