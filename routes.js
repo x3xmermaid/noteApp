@@ -17,7 +17,7 @@ module.exports = function (app) {
     // })
     // NOTE
     // GET
-    app.get('/note/:id', controlNote.show);
+    app.get('/note', controlNote.show);
     // POST
     app.post('/note', controlNote.insert);
     // PATCH

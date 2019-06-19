@@ -5,12 +5,11 @@ const bodyParser = require('body-parser')
 const routes = require('./routes');
 const cors = require('cors');
 
-var allowedOrigins = [
-                      'http://bing .com'];
+var allowedOrigins = ['http://192.168.6.119'];
 
 app.use(cors({
   origin: function(origin, callback){
-
+      console.log(origin)
     // allow requests with no origin 
     // (like mobile apps or curl requests)
     if(!origin) return callback(null, true);
@@ -28,7 +27,11 @@ app.use(cors({
 app.use(
     bodyParser.urlencoded({
         extended: true,
-    })
+    }),
+    function(req,res,next){
+        console.log(req.host+req.method);
+        next()
+    }
 )
 
 // app.use((req, res, next) => {

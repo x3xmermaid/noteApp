@@ -4,7 +4,7 @@ const con = require('../connection');
 const resp = require('../response')
 
 exports.show = function(req, res, next){
-    if(req.params.id === '0'){
+    if(!(req.query.id)){
         con.query(
                 `SELECT d.id, title, note, time, C.category FROM data as d inner join category as C on d.id_category=C.id`,
                 function(error, rows, field){
@@ -19,7 +19,7 @@ exports.show = function(req, res, next){
     }else{
         con.query(
                 `SELECT * FROM data where id=?`,
-                [req.params.id],
+                [req.query.id],
                 function(error, rows, field){
                     if(error){
                         throw error;
