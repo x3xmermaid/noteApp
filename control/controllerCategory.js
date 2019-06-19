@@ -4,21 +4,36 @@ const con = require('../connection');
 const resp = require('../response')
 
 exports.show = function(req, res){
+    if(!(req,query.id)){
         con.query(
-            `SELECT * FROM category`,
-            function(error, rows, field){
-                if(error){
-                    throw error;
-                }else{
-                    res.json(rows);
-                    res.end;
+                `SELECT * FROM category`,
+                function(error, rows, field){
+                    if(error){
+                        throw error;
+                    }else{
+                        res.json(rows);
+                        res.end;
+                    }
                 }
-            }
         )
+    }else{
+        con.query(
+                `SELECT * FROM category where id=?`,
+                [req.query.id],
+                function(error, rows, field){
+                    if(error){
+                        throw error;
+                    }else{
+                        res.json(rows);
+                        res.end;
+                    }
+                }
+        )
+    } 
         // next();
 }
 
-exports.insert = function(req, res, next){
+exports.insert = function(req, res){
     let Category = req.body.category;
     con.query(
         `INSERT INTO category SET category=?`,
@@ -34,7 +49,7 @@ exports.insert = function(req, res, next){
     // next()
 }
 
-exports.update = function(req, res, next){
+exports.update = function(req, res){
     let Category = req.body.category;
     let Id = req.body.id;
     con.query(
@@ -51,7 +66,7 @@ exports.update = function(req, res, next){
     // next()
 }
 
-exports.delete = function(req, res, next){
+exports.delete = function(req, res){
     let Id = req.body.id;
     con.query(
         `DELETE FROM category where id=?`,

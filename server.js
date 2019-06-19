@@ -27,11 +27,7 @@ app.use(cors({
 app.use(
     bodyParser.urlencoded({
         extended: true,
-    }),
-    function(req,res,next){
-        console.log(req.host+req.method);
-        next()
-    }
+    })
 )
 
 // app.use((req, res, next) => {

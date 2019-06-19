@@ -15,7 +15,7 @@ module.exports = function (app) {
     //     console.log('aaaa');
     //     next();
     // })
-    // NOTE
+    // NOTE 
     // GET
     app.get('/note', controlNote.show);
     // POST
