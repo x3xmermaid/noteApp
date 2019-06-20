@@ -2,36 +2,23 @@
 
 module.exports = function (app) {
     const controlNote = require('./control/controllerNote')
+    const controller = require('./control/controller')
     const controlCategory = require('./control/controllerCategory')
-
-    // GET
-    // app.get('/show/:id', function(req, res, next){
-    //     if(req.params.id === '1'){
-    //         app.get('/show/0', controller.show);
-    //     }
-    //     next();
-    // }, function(req, res, next){
-    //         // next(controller.show);
-    //     console.log('aaaa');
-    //     next();
-    // })
-    // NOTE 
-    // GET
-    app.get('/note', controlNote.show);
-    // POST
-    app.post('/note', controlNote.insert);
-    // PATCH
-    app.patch('/note', controlNote.update);
-    // DELETE
-    app.delete('/note', controlNote.delete);
     
+    // app.get('/note', controlNote.a);
+    // console.log(req.path);
+    // app.get('')
+    // app.post('/note', controlNote.insert);
+    // app.patch('/note', controlNote.update);
+    // app.delete('/note', controlNote.delete);
+    
+    app.get('*', controller.show);
+    app.patch('*', controller.update);
+    app.delete('*', controller.delete);
+    app.post('*', controller.insert);
     // Category
-    // GET
-    app.get('/category', controlCategory.show);
-    // POST
-    app.post('/category', controlCategory.insert);
-    // PATCH
-    app.patch('/category', controlCategory.update);
-    // DELETE
-    app.delete('/category', controlCategory.delete);
+    // app.get('/category', controlCategory.show);
+    // app.post('/category', controlCategory.insert);
+    // app.patch('/category', controlCategory.update);
+    // app.delete('/category', controlCategory.delete);
 }
