@@ -2,7 +2,7 @@
 
 exports.insertTrue = function (values, res){
     const message = {
-        error: "False",
+        error: false,
         row: values,
         Message: "data Has Been Created"
     }
@@ -12,7 +12,7 @@ exports.insertTrue = function (values, res){
 
 exports.updateTrue = function (values, res){
     const message = {
-        error: "False",
+        error: "false",
         row: values,
         Message: "data Has Been updated"
     }
@@ -22,9 +22,18 @@ exports.updateTrue = function (values, res){
 
 exports.deleteTrue = function (values, res){
     const message = {
-        error: "False",
+        error: false,
         row: values,
         Message: "data Has Been deleted"
+    }
+    res.json(message);
+    res.end;
+}
+
+exports.showTrue = function (value, value2, res){
+    const message = {
+        Data: value,
+        note: value2
     }
     res.json(message);
     res.end;

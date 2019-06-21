@@ -25,12 +25,24 @@ module.exports = {
         let sql=`insert into `+value+ ` SET `
         return sql
     },
+    iJoin: function (table, table2, field1, field2 ){
+        let sql=`inner join `+table+` on `+table+`.`+field1+`=`+table2+`.`+field2
+        return sql
+    },
     where: function (value) { 
+        let sql=` where `+ value + `= ?` 
+        return sql
+    },
+    search: function (value) {
         let sql=` where `+ value + `= ?` 
         return sql
     },
     set: function (value) {  
         let sql = value +  ` = ? , `
+        return sql;
+    },
+    timeNow: function (value) {  	
+        let sql = value +  ` = now( ) , `
         return sql;
     },
     limit: function (offset) {  
@@ -47,21 +59,23 @@ module.exports = {
         return allSet;
         // console.log(allSet);
     },
-    mergeSql: function(allSql ,parameter, callback){
+    mergeSql: function(allSql ,parameter, paging, callback){
         allSql = allSql.join(' ');
         // allSql
+        
         con.query(allSql, parameter,
             function(error, rows, field){
                 if(error){
                     throw error;
                 }else{
-                    callback(rows);
+                    
+                    callback(rows, paging);
                     // return rows
                 }
             }
         )
         // a()
-        console.log(allSql);
+        // console.log(total);
     }
 }
 
