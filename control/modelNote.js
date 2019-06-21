@@ -5,10 +5,6 @@ const resp = require('../response')
 const sqlRows = require('./sqlData')
 
 module.exports = {
-    select: function () {  
-        let sql=`SELECT d.id, title, note, time, C.category FROM data as d inner join category as C on d.id_category=C.id `
-        return sql
-    },
     select2: function (value) {  
         let sql=`SELECT * FROM `+value
         return sql

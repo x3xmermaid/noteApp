@@ -6,7 +6,6 @@ const con = require('../connection');
 const resp = require('../response')
 const model = require('./modelNote');
 // const setting = require('./setting');
-// const count = 3
 
 exports.insert = function(req, res){
     let table = req.path;
@@ -32,69 +31,76 @@ exports.insert = function(req, res){
 }
 
 exports.update = function(req, res){
-    let sqlID = ``;
-    let parameter = [];
+    let table = req.path;
+    table = table.substring(1)
+    let allSql = [model.update(table)];
     let allSet = [];
-    // parameter.push(req.body.title) 
-    let allSql =[model.update()];
-    // console.log(req.body.note)
+    let parameter = [];
+
     for (const key in req.body) {
-        allSet.push(model.set(``+key))
-        // console.log(parameter)
-        parameter.push(req.body[key]) 
+        if(req.body[key] === `now()`){
+            allSet.push(model.timeNow(``+key))
+        }else{
+            allSet.push(model.set(``+key))
+            parameter.push(req.body[key]) 
+        }
     }
     
     allSql.push(model.mergeSet(allSet));
 
-    if((req.query.id)){      
-        allSql.push(model.where(`id`))
-        parameter.push(req.query.id) 
+    if((req.query.where)){
+        let data = req.query.where
+        data = data.split(" ");
+        if(data.length !== 2){
+            res.send("your where syntax is in correct")
+            return 0;
+        }else{
+            allSql.push(model.where(data[0]))
+            parameter.push(data[1]) 
+        }
     }
             
-    // console.log(allSql)
-    // console.log(parameter)
-    // console.log(model.mergeSet(allSet))
     model.mergeSql(allSql, parameter, null, function(a, b){
-        // ca
-        // console.log(a.length);
-        res.send(a);
+        res.send(resp.updateTrue(a, res));
     });
     
 }
 
 exports.delete = function(req, res){
-    if(req.query.id){
-        con.query(
-            `DELETE FROM data where id=?`,
-            [req.query.id],
-            function (error, rows, field){
-                if (error){
-                    throw error;
-                }else{
-                    return res.send(resp.deleteTrue(rows, res))
-                }
-            }
-        )
-    }else{
-        res.send("silahkan masukkan query dengan parameter id untuk menghapus data");
+    let table = req.path;
+    table = table.substring(1)
+    let allSql = [model.delete(table)];
+    let allSet = [];
+    let parameter = [];
+
+    if((req.query.where)){
+        let data = req.query.where
+        data = data.split(" ");
+        if(data.length !== 2){
+            res.send("your where syntax is in correct")
+            return 0;
+        }else{
+            allSql.push(model.where(data[0]))
+            parameter.push(data[1]) 
+        }
     }
-    // next()
+            
+    model.mergeSql(allSql, parameter, null, function(a, b){
+        res.send(resp.deleteTrue(a, res));
+    });
 }
 
 exports.show = function(req, res){
     let table = req.path;
-    // console.log(table.length)
     table = table.substring(1)
     let allSql = [model.select2(table)];
     let parameter = [];
     let paging = [1,3];
     
-    // try{
     if((req.query.join)){
         let data = req.query.join
         data = data.split(" ");
-        console.log(data.length)
-        if(data.length < 3 || data.length > 3){
+        if(data.length !== 3){
             res.send("your join syntax is in correct")
             // res.end
             return 0;
@@ -102,16 +108,11 @@ exports.show = function(req, res){
             allSql.push(model.iJoin(table, data[0], data[1], data[2]))
         }
     }
-    // }catch(error){
-    //     console.log("rusak");
-    // }
-
 
     if((req.query.search)){ 
         let data = req.query.search
         data = data.split(" ");
-        console.log(data.length)
-        if(data.length < 2 || data.length > 2){
+        if(data.length !== 2){
             res.send("your search syntax is in correct")
             // res.end
             return 0;
@@ -143,16 +144,10 @@ exports.show = function(req, res){
         if(!(req.query.limit)){
             req.query.limit = process.env.COUNT;
         }
-        // let page = parseInt(req.query.count, 10);
-        // let limit = parseInt(req.query.count, 10);
-        // allSql.splice(3, 1, model.limit())
-        // parameter.push(offset, count) ; 
         paging = [req.query.page, req.query.limit]
 
     }
-    // let sql = 
     model.mergeSql(allSql, parameter, paging ,function(a, b){
-        // ca
         let page = 0
         let limit = 0
         if((b[1])){
@@ -168,7 +163,6 @@ exports.show = function(req, res){
         let nextPage = totalPage - page;
         let backPage = page - 1;
   
-        // console.log(c)
         const footNote = {
             total_Data: a.length,
             total_Page: totalPage,
@@ -189,7 +183,6 @@ exports.show = function(req, res){
         }else{
             tempRows = a
         }
-        // console.log(c)
         if(!(tempRows[0])){
             tempRows = "Data Tidak Ditemukan"
         }
@@ -200,14 +193,12 @@ exports.show = function(req, res){
 }
 
 exports.test = function(req, res){
-    // setting.table()
     if((req.query.join)){
         let data = req.query.join
         data = data.split(" ");
         console.log(data)
         if(data.length < 5){
             res.send("syntax join anda salah")
-            // res.end
         }
     }
 }
