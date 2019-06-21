@@ -31,17 +31,13 @@ Express.js, or simply Express, is a web application framework for Node.js. [More
 2. Type `npm install`
 3. Make a new file called **.env** in the root directory, set up first [here](#set-up-env-file)
 4. Turn on Web Server and MySQL can using Third-party tool like xampp, etc.
-5. Import file [simple_note_app.sql](simple_note_app.sql) to **phpmyadmin**
-6. Open Postman desktop application or Chrome web app extension that has installed before
-7. Choose HTTP Method and enter request url.(ex. localhost:3000/notes)
-8. You can see all the end point [here](#end-point-list)
+5. Open Postman desktop application or Chrome web app extension that has installed before
+6. Choose HTTP Method and enter request url.(ex. localhost:3000/notes)
+7. You can see all the end point [here](#end-point-list)
 
 ## Set up .env file
 Open .env file on your favorite code editor, and copy paste this code below :
 ```
-NODE_ENV=development
-PORT=3000
-
 DB_HOST=localhost
 DB_USER=root // default
 DB_PASS= // default
@@ -50,15 +46,11 @@ DB_NAME=simple_note_app
 
 ## End Point List
 **1. GET**
-* `/notes`
-* `/notes/:id` (Get notes by id)
-* `/category`
-* `/category/:id` (Get category by id)
-* `/notes/category/:id` (Get notes by category id)
-* `/all-notes` (Get all notes with category name)
-* `/notes?search=note_title` (Search operation)
-* `/notes?sort=` (Sort operation) // fill with asc or desc
-* `/notes?page=` (Paging for limiting notes) // fill only with integer
+* `/(table name)` (get table data)
+* `/(table name)?search=(coloumn table)+(coloumn value)` (Get table data by column table and column value)
+* `/(table name)?join=(table2 name)+(coloumn table)+(coloumn table2)` (Get table data by table field and the field value)
+
+
 
 **2. POST**
 * `/notes`
