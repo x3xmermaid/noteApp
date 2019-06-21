@@ -10,7 +10,7 @@ module.exports = {
         return sql
     },
     select2: function (value) {  
-        let sql=`SELECT * FROM ?`
+        let sql=`SELECT * FROM `+value
         return sql
     },
     update: function (value) {
@@ -26,7 +26,7 @@ module.exports = {
         return sql
     },
     iJoin: function (table, table2, field1, field2 ){
-        let sql=`inner join `+table+` on `+table+`.`+field1+`=`+table2+`.`+field2
+        let sql=`inner join `+table2+` on `+table+`.`+field1+`=`+table2+`.`+field2
         return sql
     },
     where: function (value) { 
@@ -34,7 +34,7 @@ module.exports = {
         return sql
     },
     search: function (value) {
-        let sql=` where `+ value + `= ?` 
+        let sql=` where `+ value + ` like  ?` 
         return sql
     },
     set: function (value) {  
@@ -49,8 +49,8 @@ module.exports = {
         let sql = ` limit ?, ? `
         return sql;
     },
-    sorting: function (value) {  
-        let sql = ` order by id `+ value
+    sorting: function (by, value) {  
+        let sql = ` order by `+by+` `+ value
         return sql;
     },
     mergeSet: function(allSet){
@@ -75,7 +75,7 @@ module.exports = {
             }
         )
         // a()
-        // console.log(total);
+        console.log(allSql);
     }
 }
 

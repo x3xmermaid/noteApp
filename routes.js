@@ -12,7 +12,7 @@ module.exports = function (app) {
     // app.patch('/note', controlNote.update);
     // app.delete('/note', controlNote.delete);
     
-    app.get('*', controller.test);
+    app.get('*', controller.show);
     app.patch('*', controller.update);
     app.delete('*', controller.delete);
     app.post('*', controller.insert);

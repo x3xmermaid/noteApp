@@ -4,12 +4,13 @@ module.exports = {
     table: function(value){
          value = 'notes';
         const tableName = {
-            notes: {q: "id",
+            1: notes,
+            tablefield: {q: "id",
             a: "title",
             s: "note",
             c: "time",
-            f: "id_category"
-        },
+            f: "id_category"}]
+        ,
             data: ["id",
                 "title",
                 "note",

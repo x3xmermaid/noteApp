@@ -5,12 +5,13 @@ require('dotenv').config()
 const con = require('../connection');
 const resp = require('../response')
 const model = require('./modelNote');
-const setting = require('./setting');
+// const setting = require('./setting');
 // const count = 3
 
 exports.insert = function(req, res){
     let table = req.path;
-    let allSql = [model.insert(table.substring(1)),'','',''];
+    table = table.substring(1)
+    let allSql = [model.insert(table)];
     let parameter = [];
     let allSet = [];
 
@@ -24,7 +25,7 @@ exports.insert = function(req, res){
     }
 
     allSql.push(model.mergeSet(allSet));
-    model.mergeSql(allSql, parameter, function(a){
+    model.mergeSql(allSql, parameter, null, function(a, b){
         res.send(resp.insertTrue(a, res));
     });
 
@@ -53,7 +54,7 @@ exports.update = function(req, res){
     // console.log(allSql)
     // console.log(parameter)
     // console.log(model.mergeSet(allSet))
-    model.mergeSql(allSql, parameter, function(a){
+    model.mergeSql(allSql, parameter, null, function(a, b){
         // ca
         // console.log(a.length);
         res.send(a);
@@ -84,33 +85,57 @@ exports.show = function(req, res){
     let table = req.path;
     // console.log(table.length)
     table = table.substring(1)
-    let allSql = [model.select2(table.substring(1)),'','',''];
-    let parameter = [table.toString()];
-    let paging = [];
+    let allSql = [model.select2(table)];
+    let parameter = [];
+    let paging = [1,3];
     
     // try{
-        if((req.query.join)){
-            let data = req.query.join
-            data = data.split(" ");
-            console.log(data.length)
-            if(data.length < 5){
-                res.send("syntax join anda salah")
-                // res.end
-                return 0;
-            }
+    if((req.query.join)){
+        let data = req.query.join
+        data = data.split(" ");
+        console.log(data.length)
+        if(data.length < 3 || data.length > 3){
+            res.send("your join syntax is in correct")
+            // res.end
+            return 0;
+        }else{
+            allSql.push(model.iJoin(table, data[0], data[1], data[2]))
         }
+    }
     // }catch(error){
     //     console.log("rusak");
     // }
 
 
     if((req.query.search)){ 
-        allSql.splice(1, 1, model.where())
-        parameter.push(req.query.title)  
+        let data = req.query.search
+        data = data.split(" ");
+        console.log(data.length)
+        if(data.length < 2 || data.length > 2){
+            res.send("your search syntax is in correct")
+            // res.end
+            return 0;
+        }else{
+            allSql.push(model.search(data[0]))
+            parameter.push(data[1]) 
+        }
+ 
     }
     
     if((req.query.sorting)){
-        allSql.splice(2, 1, model.sorting(req.query.sorting))
+        let data = req.query.sorting
+        data = data.split(" ");
+        console.log(data.length)
+        if(data.length === 1){
+            data[1] = "asc"
+            // res.end
+        }else if(data.length === 2){
+            data[1] = data[1]
+        }else{
+            res.send("your sorting syntax is in correct")
+            return 0;
+        }
+        allSql.push(model.sorting(data[0], data[1]))
         // parameter.push(``+)   
     }
 
