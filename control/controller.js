@@ -5,6 +5,7 @@ require('dotenv').config()
 const con = require('../connection');
 const resp = require('../response')
 const model = require('./modelNote');
+const setting = require('./setting');
 // const count = 3
 
 exports.insert = function(req, res){
@@ -82,19 +83,26 @@ exports.delete = function(req, res){
 exports.show = function(req, res){
     let table = req.path;
     // console.log(table.length)
+    table = table.substring(1)
     let allSql = [model.select2(table.substring(1)),'','',''];
-    let parameter = [];
+    let parameter = [table.toString()];
     let paging = [];
-
-    if((req.query.join)){
-        let data = req.query.join
-        data = data.split(" ");
-        console.log(data.length)
-        if(data.length < 5){
-            res.send("syntax join anda salah")
-            res.end
+    
+    // try{
+        if((req.query.join)){
+            let data = req.query.join
+            data = data.split(" ");
+            console.log(data.length)
+            if(data.length < 5){
+                res.send("syntax join anda salah")
+                // res.end
+                return 0;
+            }
         }
-    }
+    // }catch(error){
+    //     console.log("rusak");
+    // }
+
 
     if((req.query.search)){ 
         allSql.splice(1, 1, model.where())
@@ -167,7 +175,14 @@ exports.show = function(req, res){
 }
 
 exports.test = function(req, res){
-    let data = req.query.join
-    data = data.split(" ");
-    console.log(data)
+    // setting.table()
+    if((req.query.join)){
+        let data = req.query.join
+        data = data.split(" ");
+        console.log(data)
+        if(data.length < 5){
+            res.send("syntax join anda salah")
+            // res.end
+        }
+    }
 }

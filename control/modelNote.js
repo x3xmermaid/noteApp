@@ -10,7 +10,7 @@ module.exports = {
         return sql
     },
     select2: function (value) {  
-        let sql=`SELECT * FROM `+ value
+        let sql=`SELECT * FROM ?`
         return sql
     },
     update: function (value) {
