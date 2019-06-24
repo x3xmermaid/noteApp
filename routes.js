@@ -5,14 +5,7 @@ module.exports = function (app) {
     const controller = require('./control/controller')
     const controlCategory = require('./control/controllerCategory')
     
-    // app.get('/note', controlNote.a);
-    // console.log(req.path);
-    // app.get('')
-    // app.post('/note', controlNote.insert);
-    // app.patch('/note', controlNote.update);
-    // app.delete('/note', controlNote.delete);
-    
-    app.get('*', controller.show);
+    app.get('*', controller.test);
     app.patch('*', controller.update);
     app.delete('*', controller.delete);
     app.post('*', controller.insert);

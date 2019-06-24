@@ -147,6 +147,7 @@ exports.show = function(req, res){
         paging = [req.query.page, req.query.limit]
 
     }
+    
     model.mergeSql(allSql, parameter, paging ,function(a, b){
         let page = 0
         let limit = 0
@@ -163,14 +164,7 @@ exports.show = function(req, res){
         let nextPage = totalPage - page;
         let backPage = page - 1;
   
-        const footNote = {
-            total_Data: a.length,
-            total_Page: totalPage,
-            Page: page,
-            next_Page: nextPage,
-            back_Page: backPage,
-            limit: limit
-        }
+
         if((b[1])){
             let temp =0; 
             for(let i= first; i<last;i++){
@@ -187,18 +181,57 @@ exports.show = function(req, res){
             tempRows = "Data Tidak Ditemukan"
         }
 
+        const footNote = {
+            total_Data: a.length,
+            total_Page: totalPage,
+            Data_in_page: tempRows.length,
+            Page: page,
+            next_Page: nextPage,
+            back_Page: backPage,
+            limit: limit
+        }
+
         res.send(resp.showTrue(tempRows, footNote, res));
 
     });
 }
 
 exports.test = function(req, res){
-    if((req.query.join)){
-        let data = req.query.join
-        data = data.split(" ");
-        console.log(data)
-        if(data.length < 5){
-            res.send("syntax join anda salah")
-        }
-    }
+    
+    // const fs = require('fs');
+
+    // let rawdata = fs.readFileSync('student.json');  
+    
+    // let student = {  
+    //     name: 'M7',
+    //     age: 23, 
+    //     gender: 'Male',
+    //     department: 'English',
+    //     car: 'Honda' 
+    // };
+
+    // let data = JSON.stringify(student, null, 2);  
+    // fs.writeFileSync('student-2.json', data);  
+
+    let sql = `SELECT COLUMN_NAME as colom
+    FROM INFORMATION_SCHEMA.COLUMNS
+    WHERE TABLE_SCHEMA = 'noteapp' AND TABLE_NAME = 'notes'`
+
+    let c= ``
+    model.mergeSql(sql, null, null, function(a, b){
+        // console.log(a);
+        c = a
+        let sql = `select * from notes`
+        model.mergeSql(sql, null, null, function(a, b){
+            console.log(c)
+            // console.log(a)
+        })
+    })
+
+    // console.log(rawdata);
+
+
+
+
+
 }

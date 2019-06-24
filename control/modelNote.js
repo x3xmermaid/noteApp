@@ -56,7 +56,7 @@ module.exports = {
         // console.log(allSet);
     },
     mergeSql: function(allSql ,parameter, paging, callback){
-        allSql = allSql.join(' ');
+        // allSql = allSql.join(' ');
         // allSql
         
         con.query(allSql, parameter,

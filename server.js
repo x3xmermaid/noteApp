@@ -30,20 +30,6 @@ app.use(
     })
 )
 
-// app.use((req, res, next) => {
-//     res.header("Access-Control-Allow-Origin", "https://www.google.com, https://www.bing.com");
-//     res.header(
-//         "Access-Control-Allow-Headers",
-//         "Origin, X-Requested-With, Content-Type, Accept, Authorization"
-//     );
-//     if(req.method === 'OPTIONS'){
-//         res.header('Access-Control-Allow-Methods', 'DELETE')
-//         return res.status(200).json({})
-//     }
-//     next()
-// })
-
-
 routes(app);
 
 app.listen(port);
