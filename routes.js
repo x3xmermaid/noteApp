@@ -5,7 +5,7 @@ module.exports = function (app) {
     const controller = require('./control/controller')
     const controlCategory = require('./control/controllerCategory')
     
-    app.get('*', controller.test);
+    app.get('*', controller.show);
     app.patch('*', controller.update);
     app.delete('*', controller.delete);
     app.post('*', controller.insert);

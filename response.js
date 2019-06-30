@@ -35,6 +35,7 @@ exports.showTrue = function (value, value2, res){
         Data: value,
         note: value2
     }
-    res.json(message);
+    res.send(res.json(message))
+    // res.json(message);
     res.end;
 }

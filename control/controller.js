@@ -21,8 +21,11 @@ exports.insert = function(req, res){
             allSet.push(model.set(``+key))
             parameter.push(req.body[key]) 
         }
+        // console.log(rkey)
     }
 
+    // console.log("bler")
+    // console.log(req.body.test2)
     allSql.push(model.mergeSet(allSet));
     model.mergeSql(allSql, parameter, null, function(a, b){
         res.send(resp.insertTrue(a, res));
@@ -44,6 +47,7 @@ exports.update = function(req, res){
             allSet.push(model.set(``+key))
             parameter.push(req.body[key]) 
         }
+        console.log(req.body[key])
     }
     
     allSql.push(model.mergeSet(allSet));
@@ -59,7 +63,7 @@ exports.update = function(req, res){
             parameter.push(data[1]) 
         }
     }
-            
+    
     model.mergeSql(allSql, parameter, null, function(a, b){
         res.send(resp.updateTrue(a, res));
     });
@@ -87,6 +91,7 @@ exports.delete = function(req, res){
             
     model.mergeSql(allSql, parameter, null, function(a, b){
         res.send(resp.deleteTrue(a, res));
+
     });
 }
 
@@ -95,7 +100,7 @@ exports.show = function(req, res){
     table = table.substring(1)
     let allSql = [model.select2(table)];
     let parameter = [];
-    let paging = [1,3];
+    let paging = [1,6];
     
     if((req.query.join)){
         let data = req.query.join
@@ -191,8 +196,12 @@ exports.show = function(req, res){
             limit: limit
         }
 
-        res.send(resp.showTrue(tempRows, footNote, res));
-
+        // res.send(resp.showTrue(tempRows, footNote, res));
+        res.json({
+            data: tempRows,
+            note: footNote,
+        });
+        res.end();
     });
 }
 

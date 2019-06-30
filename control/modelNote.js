@@ -56,17 +56,18 @@ module.exports = {
         // console.log(allSet);
     },
     mergeSql: function(allSql ,parameter, paging, callback){
-        // allSql = allSql.join(' ');
+        allSql = allSql.join(' ');
         // allSql
         
         con.query(allSql, parameter,
             function(error, rows, field){
                 if(error){
-                    throw error;
+                    console.log(error) 
                 }else{
                     
                     callback(rows, paging);
                     // return rows
+                    console.log(rows)
                 }
             }
         )
