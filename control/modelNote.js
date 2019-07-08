@@ -22,15 +22,19 @@ module.exports = {
         return sql
     },
     iJoin: function (table, table2, field1, field2 ){
-        let sql=`inner join `+table2+` on `+table+`.`+field1+`=`+table2+`.`+field2
+        let sql=`left join `+table2+` on `+table+`.`+field1+`=`+table2+`.`+field2
         return sql
     },
     where: function (value) { 
         let sql=` where `+ value + `= ?` 
         return sql
     },
-    search: function (value) {
-        let sql=` where `+ value + ` like  ?` 
+    where2: function (value, value2) { 
+        let sql=` where `+ value + ` is null`
+        return sql
+    },
+    search: function (value, value2) {
+        let sql=` where `+ value + ` like '%`+value2+`%'` 
         return sql
     },
     set: function (value) {  
@@ -55,19 +59,27 @@ module.exports = {
         return allSet;
         // console.log(allSet);
     },
+    and: function(value, value2){
+        let sql = ` and `+value+` = ? `
+        return sql
+    } ,
+    and2: function(value, value2){
+        let sql = ` and `+value+` is null`
+        return sql
+    } ,
     mergeSql: function(allSql ,parameter, paging, callback){
         allSql = allSql.join(' ');
         // allSql
-        
+        console.log(parameter)
         con.query(allSql, parameter,
             function(error, rows, field){
                 if(error){
                     console.log(error) 
                 }else{
                     
-                    callback(rows, paging);
+                    // console.log(field)
+                    callback(rows, parameter, paging);
                     // return rows
-                    console.log(rows)
                 }
             }
         )

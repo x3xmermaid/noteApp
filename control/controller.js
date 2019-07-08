@@ -27,8 +27,23 @@ exports.insert = function(req, res){
     // console.log("bler")
     // console.log(req.body.test2)
     allSql.push(model.mergeSet(allSet));
-    model.mergeSql(allSql, parameter, null, function(a, b){
-        res.send(resp.insertTrue(a, res));
+    model.mergeSql(allSql, parameter, null, function(a, b, c){
+        console.log(b[2]);
+        if(req.body.id_category){
+            con.query("select * from category where no=?", b[2], function(err, rows, field){
+                if(err){
+                    throw err
+                }else{
+                    
+                    console.log(rows)
+                    // return 0;
+                    res.send(resp.insertTrue(a, b, rows, res));
+                }
+            })
+        }else{
+
+            res.send(resp.insertTrue(a, b, null,res));
+        }
     });
 
 }
@@ -89,8 +104,8 @@ exports.delete = function(req, res){
         }
     }
             
-    model.mergeSql(allSql, parameter, null, function(a, b){
-        res.send(resp.deleteTrue(a, res));
+    model.mergeSql(allSql, parameter, null, function(a, b, c){
+        res.send(resp.deleteTrue(a, b, res));
 
     });
 }
@@ -100,7 +115,7 @@ exports.show = function(req, res){
     table = table.substring(1)
     let allSql = [model.select2(table)];
     let parameter = [];
-    let paging = [1,6];
+    let paging = [1,8];
     
     if((req.query.join)){
         let data = req.query.join
@@ -114,16 +129,44 @@ exports.show = function(req, res){
         }
     }
 
+    if((req.query.where)){
+        let data = req.query.where
+        data = data.split(" ");
+        if(data.length !== 2){
+            res.send("your where syntax is in correct")
+            return 0;
+        }else{
+            if(data[1] === 'null'){
+                
+                // console.log("aye"+data[1])
+                allSql.push(model.where2(data[0]))
+            }else{
+                allSql.push(model.where(data[0]))
+                parameter.push(data[1]) 
+            }
+        }
+    }
+
     if((req.query.search)){ 
         let data = req.query.search
         data = data.split(" ");
-        if(data.length !== 2){
+        console.log(data);
+        if(data.length == 4){
+            allSql.push(model.search(data[0], data[1]))
+            if(data[3] === 'null'){
+                allSql.push(model.and2(data[2]))
+            }else{
+                allSql.push(model.and(data[2], data[3]))
+                parameter.push(data[3]) 
+            }
+            // parameter.push(data[1]) 
+        }else if (data.length == 2){
+            allSql.push(model.search(data[0], data[1]))
+            parameter.push(data[1]) 
+        }else{
             res.send("your search syntax is in correct")
             // res.end
             return 0;
-        }else{
-            allSql.push(model.search(data[0]))
-            parameter.push(data[1]) 
         }
  
     }
@@ -153,14 +196,14 @@ exports.show = function(req, res){
 
     }
     
-    model.mergeSql(allSql, parameter, paging ,function(a, b){
+    model.mergeSql(allSql, parameter, paging ,function(a, c, b){
         let page = 0
         let limit = 0
         if((b[1])){
             page = parseInt(b[0], 10);
             limit = parseInt(b[1], 10);
         }
-
+        // console.log(c)
         var tempRows = [];
         let first = (page - 1) * limit ;
         let last = first + limit;
@@ -183,9 +226,9 @@ exports.show = function(req, res){
             tempRows = a
         }
         if(!(tempRows[0])){
-            tempRows = "Data Tidak Ditemukan"
+            tempRows = "empty"
         }
-
+        
         const footNote = {
             total_Data: a.length,
             total_Page: totalPage,
@@ -195,7 +238,10 @@ exports.show = function(req, res){
             back_Page: backPage,
             limit: limit
         }
-
+        
+        if(b[0]=='all'){
+            tempRows = a
+        }
         // res.send(resp.showTrue(tempRows, footNote, res));
         res.json({
             data: tempRows,

@@ -1,9 +1,11 @@
 'use strict'
 
-exports.insertTrue = function (values, res){
+exports.insertTrue = function (values, value2, value3, res){
     const message = {
         error: false,
         row: values,
+        parameter: value2,
+        parameter2: value3,
         Message: "data Has Been Created"
     }
     res.json(message);
@@ -20,10 +22,11 @@ exports.updateTrue = function (values, res){
     res.end;
 }
 
-exports.deleteTrue = function (values, res){
+exports.deleteTrue = function (values, value2, res){
     const message = {
         error: false,
         row: values,
+        parameter: value2,
         Message: "data Has Been deleted"
     }
     res.json(message);
