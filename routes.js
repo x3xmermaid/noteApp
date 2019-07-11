@@ -3,7 +3,7 @@
 module.exports = function (app) {
     const controlNote = require('./control/controllerNote')
     const controller = require('./control/controller')
-    const controlCategory = require('./control/controllerCategory')
+    const controlManual = require('./control/controllerManual')
     const controllerImage = require('./control/controllerImage')
     
     app.get('/mqb/*', controller.show);
@@ -11,7 +11,8 @@ module.exports = function (app) {
     app.delete('/mqb/*', controller.delete);
     app.post('/mqb/*', controller.insert);
 
-    app.post('/upload', controllerImage.uploadImage);
+    app.post('/manual/upload', controllerImage.uploadImage);
+    app.get('/manual/cart', controlManual.show)
     // Category
     // app.get('/category', controlCategory.show);
     // app.post('/category', controlCategory.insert);
