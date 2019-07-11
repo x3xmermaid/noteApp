@@ -22,9 +22,9 @@ exports.uploadImage = function (req, res, next) {
           // SEND FILE TO CLOUDINARY
           const cloudinary = require('cloudinary').v2
           cloudinary.config({
-            cloud_name: 'dvyonb6zt',
-            api_key: '669188571915784',
-            api_secret: 'puylDRecNQxm2NQNhBeLlPqHjLg'
+            cloud_name: 'hys7tecaj',
+            api_key: '988783636325669',
+            api_secret: '-p-DJ7gvP74LwT7S2A0yYUOvins'
           })
           
           const path = req.file.path
