@@ -22,15 +22,23 @@ module.exports = {
         return sql
     },
     iJoin: function (table, table2, field1, field2 ){
-        let sql=`left join `+table2+` on `+table+`.`+field1+`=`+table2+`.`+field2
+        let sql=` inner join `+table2+` on `+table+`.`+field1+`=`+table2+`.`+field2
         return sql
     },
-    where: function (value) { 
-        let sql=` where `+ value + `= ?` 
+    where: function (value, value2) { 
+        let field = value
+        if(value2 !== undefined){
+            field = value2+"."+value
+        }
+        let sql=` where `+ field + ` = ?` 
         return sql
     },
     where2: function (value, value2) { 
         let sql=` where `+ value + ` is null`
+        return sql
+    },
+    where3: function(value, value2){
+        let sql=` where `+ value2 + ` is null`
         return sql
     },
     search: function (value, value2) {

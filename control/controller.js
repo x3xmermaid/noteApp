@@ -111,6 +111,7 @@ exports.delete = function(req, res){
 }
 
 exports.show = function(req, res){
+    // console.log("aa")
     let table = req.path;
     table = table.split("/")
     let allSql = [model.select2(table[2])];
@@ -120,29 +121,40 @@ exports.show = function(req, res){
     if((req.query.join)){
         let data = req.query.join
         data = data.split(" ");
-        if(data.length !== 3){
-            res.send("your join syntax is in correct")
+        let mod = data.length % 3
+        console.log(data)
+        if(mod !== 0){
+            res.send("your join syntax is in correct2")
             // res.end
             return 0;
         }else{
-            allSql.push(model.iJoin(table, data[0], data[1], data[2]))
+            let max = data.length/3;
+            let first = 0
+            let second = 1
+            let third = 2
+            for(let i=0;i<max;i++){
+                allSql.push(model.iJoin(table[2], data[first], data[second], data[third]))
+                first = first + 3
+                second = second + 3
+                third = third + 3
+            }
         }
     }
 
     if((req.query.where)){
         let data = req.query.where
         data = data.split(" ");
-        if(data.length !== 2){
-            res.send("your where syntax is in correct")
+        if(data.length !== 3 ){
+            res.send("your where syntax is in correct 3")
             return 0;
         }else{
-            if(data[1] === 'null'){
+            if(data[2] === 'null'){
                 
                 // console.log("aye"+data[1])
-                allSql.push(model.where2(data[0]))
+                allSql.push(model.where2(data[1]))
             }else{
-                allSql.push(model.where(data[0]))
-                parameter.push(data[1]) 
+                allSql.push(model.where(data[1], data[0]))
+                parameter.push(data[2]) 
             }
         }
     }
@@ -252,9 +264,36 @@ exports.show = function(req, res){
 }
 
 exports.test = function(req, res){
-    
-    let table = req.path;
-    table = table.split("/");
-    console.log(table[2])
+    let allSql =[]
+    if((req.query.join)){
+        let data = req.query.join
+        data = data.split(" ");
+        let mod = data.length % 3
+        if(mod !== 0){
+            res.send("your join syntax is in correct")
+            // res.end
+            return 0;
+        }else{
+            let max = data.length/3;
+            let first = 0
+            let second = 1
+            let third = 2
+            console.log(max)
+            for(let i=0;i<max;i++){
+                console.log(model.iJoin("tb_product", data[first], data[second], data[third]))
+                first = first + 3
+                second = second + 3
+                third = third + 3
+            }
+            // console.log("data")
+        }
+    }
+
+    if((req.query.where)){
+        let data = req.query.where
+        data = data.split(" ");
+        console.log(model.where("A", "B"))
+        console.log(data)
+    }
 
 }
