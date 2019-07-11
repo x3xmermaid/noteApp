@@ -9,8 +9,8 @@ const model = require('./modelNote');
 
 exports.insert = function(req, res){
     let table = req.path;
-    table = table.substring(1)
-    let allSql = [model.insert(table)];
+    table = table.split("/")
+    let allSql = [model.insert(table[2])];
     let parameter = [];
     let allSet = [];
 
@@ -50,8 +50,8 @@ exports.insert = function(req, res){
 
 exports.update = function(req, res){
     let table = req.path;
-    table = table.substring(1)
-    let allSql = [model.update(table)];
+    table = table.split("/")
+    let allSql = [model.update(table[2])];
     let allSet = [];
     let parameter = [];
 
@@ -87,8 +87,8 @@ exports.update = function(req, res){
 
 exports.delete = function(req, res){
     let table = req.path;
-    table = table.substring(1)
-    let allSql = [model.delete(table)];
+    table = table.split("/")
+    let allSql = [model.delete(table[2])];
     let allSet = [];
     let parameter = [];
 
@@ -112,8 +112,8 @@ exports.delete = function(req, res){
 
 exports.show = function(req, res){
     let table = req.path;
-    table = table.substring(1)
-    let allSql = [model.select2(table)];
+    table = table.split("/")
+    let allSql = [model.select2(table[2])];
     let parameter = [];
     let paging = [1,8];
     
@@ -253,40 +253,8 @@ exports.show = function(req, res){
 
 exports.test = function(req, res){
     
-    // const fs = require('fs');
-
-    // let rawdata = fs.readFileSync('student.json');  
-    
-    // let student = {  
-    //     name: 'M7',
-    //     age: 23, 
-    //     gender: 'Male',
-    //     department: 'English',
-    //     car: 'Honda' 
-    // };
-
-    // let data = JSON.stringify(student, null, 2);  
-    // fs.writeFileSync('student-2.json', data);  
-
-    let sql = `SELECT COLUMN_NAME as colom
-    FROM INFORMATION_SCHEMA.COLUMNS
-    WHERE TABLE_SCHEMA = 'noteapp' AND TABLE_NAME = 'notes'`
-
-    let c= ``
-    model.mergeSql(sql, null, null, function(a, b){
-        // console.log(a);
-        c = a
-        let sql = `select * from notes`
-        model.mergeSql(sql, null, null, function(a, b){
-            console.log(c)
-            // console.log(a)
-        })
-    })
-
-    // console.log(rawdata);
-
-
-
-
+    let table = req.path;
+    table = table.split("/");
+    console.log(table[2])
 
 }
