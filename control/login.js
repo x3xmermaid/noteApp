@@ -6,14 +6,57 @@ const jwt = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
 const connection = require('../connection');
 
-// Initialize Sender Email
-const transporter = nodemailer.createTransport({
-	service: 'Gmail',
-	auth: {
-		user: "x3xhappyzombiesx3x@gmail.com",
-		pass: "Mermaid4you"
+// Initialize Google APIs
+const { google } = require('googleapis');
+const OAuth2 = google.auth.OAuth2;
+
+// 6 Digit Random Generator
+const digit = Math.floor(100000 + Math.random() * 900000);
+
+// Initailize to send 6 Digit Random Number via email
+async function sendEmail(email) { // Use Async Javascript Function
+	// Refresh Token from 'https://developers.google.com/oauthplayground'
+	const token_refresh = "1/vmKGFhgWAlWfsA9OGbGjtGL0lQ64DRl4b5fqwcvfUFs"
+
+	// Setup OAuth Client
+	const oauth2Client = new OAuth2 (
+		"323684778043-uibqc8mra877mmpfkjqud6klni0hbg8r.apps.googleusercontent.com", // ClientID
+		"mFzDrvR155bm_BGsl2B0fwST", // Client Secret
+		"https://developers.google.com/oauthplayground" // Redirect URL
+	)
+
+	// Set OAuth Credential & Get Access Token
+	oauth2Client.setCredentials({
+		refresh_token: token_refresh
+	});
+	const tokens = await oauth2Client.refreshAccessToken()
+	const acessToken = tokens.credentials.access_token
+
+	// Initialize Sender Email
+	const transporter = nodemailer.createTransport({
+		service: 'Gmail',
+		auth: {
+			type: "OAuth2",
+			user: "dimasgamers01@gmail.com",
+			clientId: "323684778043-uibqc8mra877mmpfkjqud6klni0hbg8r.apps.googleusercontent.com",
+			clientSecret: "mFzDrvR155bm_BGsl2B0fwST",
+			refreshToken: token_refresh,
+			accessToken: acessToken
+		}
+	});
+
+	// Initialize Receiver Email
+	const mailOptions = {
+		from: "Tokopedia",
+		to: email,
+		subject: '6 Digit kode rahasia untuk melanjutkan Registrasi',
+		generateTextFromHTML: true,
+		html: 'JANGAN MEMBERITAHUKAN KODE RAHASIA INI KE SIAPAPUN termasuk pihak Tokopedia.<br>WASPADA TERHADAP KASUS PENIPUAN! KODE RAHASIA untuk melanjutkan Login: <b><i>' + digit + '</i></b>'
 	}
-});
+
+	// Send Email
+	transporter.sendMail(mailOptions, function(err, info){ if (err) {  console.log(err); } });
+}
 
 /* ↓ MIDDLEWARE FUNCTION ↓ */
 
@@ -30,16 +73,6 @@ exports.user = function (req, res) {
 	// Initialize input from Body
 	let email = req.body.email;
 
-	const digit = Math.floor(100000 + Math.random() * 900000); // 6 Digit Random Generator
-
-	// Initialize Receiver Email
-	const mailOptions = {
-		from: "x3xhappyzombiesx3x@gmail.com",
-		to: email,
-		subject: '6 Digit kode rahasia untuk melanjutkan Login',
-		html: 'JANGAN MEMBERITAHUKAN KODE RAHASIA INI KE SIAPAPUN termasuk pihak Tokopedia.<br>WASPADA TERHADAP KASUS PENIPUAN! KODE RAHASIA untuk melanjutkan Login: <b><i>' + digit + '</i></b>'
-	}
-
 	if (email === '') { // If Email is Empty
 		res.json({ error: true, message: 'Alamat Email harus di Isi' });
 	} else { // If Email not Empty
@@ -54,38 +87,32 @@ exports.user = function (req, res) {
 					if (total === 0) { // If Email doesn't exists
 						res.json({ error: true, message: 'Email tidak ditemukan' });
 					} else { // If Email exists
-						// Send Email & Set 6 digit code on Database
-						transporter.sendMail(mailOptions, function(err, info){
-							if (err) {
-								res.json({ error:true, message: err });
-							} else {
-								connection.query(
-									`UPDATE tb_user SET password=? WHERE email=?`,
-									[digit, email],
-									function (err) {
-										if (err) {
-											res.json({ error: true, message: err });
-										} else {
-											connection.query(
-												`SELECT id_user FROM tb_user WHERE email=?`,
-												[email],
-												function (err, result) {
-													if (err) {
-														res.json({ error: true, message: err });
-													} else {
-														res.json({
-															error: false,
-															message: 'Berhasil Login',
-															result: result
-														});
-													}
-												}
-											)
+						sendEmail(email); // Call sendEmail() Function
+						connection.query(
+							`UPDATE tb_user SET password=? WHERE email=?`,
+							[digit, email],
+							function (err) {
+								if (err) {
+									res.json({ error: true, message: err });
+								} else {
+									connection.query(
+										`SELECT id_user FROM tb_user WHERE email=?`,
+										[email],
+										function (err, result) {
+											if (err) {
+												res.json({ error: true, message: err });
+											} else {
+												res.json({
+													error: false,
+													message: 'Berhasil Login',
+													result: result
+												});
+											}
 										}
-									}
-								)
+									)
+								}
 							}
-						});
+						)
 					}
 				}
 			}

@@ -25,6 +25,7 @@
     "datauri": "^2.0.0",
     "dotenv": "^8.0.0",
     "express": "^4.17.1",
+    "googleapis": "^41.0.0",
     "jsonwebtoken": "^8.5.1",
     "moment": "^2.24.0",
     "multer": "^1.4.1",
