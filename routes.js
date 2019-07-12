@@ -5,6 +5,7 @@ module.exports = function (app) {
     const controller = require('./control/controller')
     const controlManual = require('./control/controllerManual')
     const controllerImage = require('./control/controllerImage')
+    const register = require('./control/register');
     // const multerUploads = require('./multer')
     
     app.get('/mqb/*', controller.show);
@@ -14,6 +15,8 @@ module.exports = function (app) {
 
     app.post('/manual/upload', controllerImage.uploadImage);
     app.get('/manual/cart', controlManual.show)
+    app.post('/manual/register', register.create); // Send Email to Register
+	app.post('/manual/register_auth/:id', register.check); // Checking 6 Digit Random Number
     // Category
     // app.get('/category', controlCategory.show);
     // app.post('/category', controlCategory.insert);
