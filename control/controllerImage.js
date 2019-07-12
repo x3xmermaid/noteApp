@@ -29,7 +29,7 @@ exports.uploadImage = function (req, res, next) {
           
           const path = req.file.path
           const uniqueFilename = new Date().toISOString()
-      
+          
           cloudinary.uploader.upload(
             path,
             { public_id: `product/${uniqueFilename}`, tags: `product` }, // directory and tags are optional
