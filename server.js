@@ -7,6 +7,8 @@ const cors = require('cors');
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 var allowedOrigins = ['http://localhost:8081'];
+// const resolve = require('path')
+// const uploader = require('./')
 
 const favicon = require('serve-favicon');
 const path = require('path');

@@ -1,13 +1,6 @@
 const multer = require('multer')
-    const storage = multer.diskStorage({
-    destination: function(req, file, cb) {
-        cb(null, 'uploads/')
-    },
-    filename: function(req, file, cb) {
-        console.log(file)
-        cb(null, file.originalname)
-    }
-})
+const dataUri = require('datauri')
+    const storage = multer.memoryStorage()
 
 exports.uploadImage = function (req, res, next) {
         const upload = multer({ storage }).single('image')
@@ -27,9 +20,11 @@ exports.uploadImage = function (req, res, next) {
             api_secret: '-p-DJ7gvP74LwT7S2A0yYUOvins'
           })
           
-          const path = req.file.path
+          // const path = 
           const uniqueFilename = new Date().toISOString()
-      
+          
+          dataUri 
+          console.log(req.file.path)
           cloudinary.uploader.upload(
             path,
             { public_id: `product/${uniqueFilename}`, tags: `product` }, // directory and tags are optional

@@ -5,6 +5,7 @@ module.exports = function (app) {
     const controller = require('./control/controller')
     const controlManual = require('./control/controllerManual')
     const controllerImage = require('./control/controllerImage')
+    // const multerUploads = require('./multer')
     
     app.get('/mqb/*', controller.show);
     app.patch('/mqb/*', controller.update);
