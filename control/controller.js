@@ -67,15 +67,15 @@ exports.update = function(req, res){
     
     allSql.push(model.mergeSet(allSet));
 
-    if((req.query.where)){
-        let data = req.query.where
+    if((req.query.wherein)){
+        let data = req.query.wherein
         data = data.split(" ");
-        if(data.length !== 2){
+        if(data.length < 2){
             res.send("your where syntax is in correct")
             return 0;
         }else{
-            allSql.push(model.where(data[0]))
-            parameter.push(data[1]) 
+            let valueIn = data.splice(0,1)
+            allSql.push(model.wherein(valueIn, data))
         }
     }
     
@@ -103,7 +103,18 @@ exports.delete = function(req, res){
             parameter.push(data[1]) 
         }
     }
-            
+    
+    if((req.query.wherein)){
+        let data = req.query.wherein
+        data = data.split(" ");
+        if(data.length < 2){
+            res.send("your where syntax is in correct")
+            return 0;
+        }else{
+            let valueIn = data.splice(0,1)
+            allSql.push(model.wherein(valueIn, data))
+        }
+    }
     model.mergeSql(allSql, parameter, null, function(a, b, c){
         res.send(resp.deleteTrue(a, b, res));
 
@@ -158,7 +169,17 @@ exports.show = function(req, res){
             }
         }
     }
-
+    if((req.query.wherein)){
+        let data = req.query.wherein
+        data = data.split(" ");
+        if(data.length < 2){
+            res.send("your where syntax is in correct")
+            return 0;
+        }else{
+            let valueIn = data.splice(0,1)
+            allSql.push(model.wherein(valueIn, data))
+        }
+    }
     if((req.query.search)){ 
         let data = req.query.search
         data = data.split(" ");
@@ -264,36 +285,19 @@ exports.show = function(req, res){
 }
 
 exports.test = function(req, res){
-    let allSql =[]
-    if((req.query.join)){
-        let data = req.query.join
+    if((req.query.wherein)){
+        let data = req.query.wherein
         data = data.split(" ");
-        let mod = data.length % 3
-        if(mod !== 0){
-            res.send("your join syntax is in correct")
-            // res.end
+        if(data.length < 2){
+            res.send("your where syntax is in correct")
             return 0;
         }else{
-            let max = data.length/3;
-            let first = 0
-            let second = 1
-            let third = 2
-            console.log(max)
-            for(let i=0;i<max;i++){
-                console.log(model.iJoin("tb_product", data[first], data[second], data[third]))
-                first = first + 3
-                second = second + 3
-                third = third + 3
-            }
-            // console.log("data")
+            let valueIn = data
+            valueIn.shift()
+            console.log(model.wherein(data[0], valueIn))
+            // parameter.push(data[1]) 
         }
     }
-
-    if((req.query.where)){
-        let data = req.query.where
-        data = data.split(" ");
-        console.log(model.where("A", "B"))
-        console.log(data)
-    }
+    // console.log(req.body.data)
 
 }

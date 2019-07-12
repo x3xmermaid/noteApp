@@ -37,8 +37,8 @@ module.exports = {
         let sql=` where `+ value + ` is null`
         return sql
     },
-    where3: function(value, value2){
-        let sql=` where `+ value2 + ` is null`
+    wherein: function(value, value2){
+        let sql=` where `+ value + ` in (`+value2+`) `
         return sql
     },
     search: function (value, value2) {

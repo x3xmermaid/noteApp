@@ -4,6 +4,8 @@ const port =   process.env.PORT || 3001;
 const bodyParser = require('body-parser')
 const routes = require('./routes');
 const cors = require('cors');
+const multer = require('multer')
+const upload = multer()
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 var allowedOrigins = ['http://localhost:8081'];
