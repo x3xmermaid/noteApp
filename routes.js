@@ -15,7 +15,7 @@ module.exports = function (app) {
     app.post('/mqb/*', controller.insert);
 
     app.post('/manual/upload', controllerImage.uploadImage);
-    app.get('/manual/cart', controlManual.show)
+    app.get('/manual/cart/:id', controlManual.show)
     app.post('/manual/register', register.create); // Send Email to Register
 	app.post('/manual/register_auth/:id', register.check); // Checking 6 Digit Random Number
     app.post('/manual/login', login.user); // Login Function
