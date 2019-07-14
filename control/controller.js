@@ -67,6 +67,18 @@ exports.update = function(req, res){
     
     allSql.push(model.mergeSet(allSet));
 
+    if((req.query.where)){
+        let data = req.query.where
+        data = data.split(" ");
+        if(data.length !== 2){
+            res.send("your where syntax is in correct")
+            return 0;
+        }else{
+            allSql.push(model.where(data[0]))
+            parameter.push(data[1]) 
+        }
+    }
+    
     if((req.query.wherein)){
         let data = req.query.wherein
         data = data.split(" ");
