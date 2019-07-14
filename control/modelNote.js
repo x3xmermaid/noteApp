@@ -85,7 +85,7 @@ module.exports = {
                     console.log(error) 
                 }else{
                     
-                    // console.log(field)
+                    // console.log()
                     callback(rows, parameter, paging);
                     // return rows
                 }
