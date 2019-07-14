@@ -285,19 +285,22 @@ exports.show = function(req, res){
 }
 
 exports.test = function(req, res){
-    if((req.query.wherein)){
-        let data = req.query.wherein
-        data = data.split(" ");
-        if(data.length < 2){
-            res.send("your where syntax is in correct")
-            return 0;
-        }else{
-            let valueIn = data
-            valueIn.shift()
-            console.log(model.wherein(data[0], valueIn))
-            // parameter.push(data[1]) 
-        }
-    }
-    // console.log(req.body.data)
+    // if((req.query.wherein)){
+    //     let data = req.query.wherein
+    //     data = data.split(" ");
+    //     if(data.length < 2){
+    //         res.send("your where syntax is in correct")
+    //         return 0;
+    //     }else{
+    //         let valueIn = data
+    //         valueIn.shift()
+    //         console.log(model.wherein(data[0], valueIn))
+    //         // parameter.push(data[1]) 
+    //     }
+    // }
+    
+    let s = req.body.email.substring(0, req.body.email.indexOf('@'));
+// document.write(s);
+    console.log(s)
 
 }

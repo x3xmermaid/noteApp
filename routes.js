@@ -12,7 +12,7 @@ module.exports = function (app) {
     app.get('/mqb/*', controller.show);
     app.patch('/mqb/*', controller.update);
     app.delete('/mqb/*', controller.delete);
-    app.post('/mqb/*', controller.insert);
+    app.post('/mqb/*', controller.test);
 
     app.post('/manual/upload', controllerImage.uploadImage);
     app.get('/manual/cart/:id', controlManual.show)

@@ -72,7 +72,7 @@ exports.test = function (req, res) {
 exports.create = function (req, res) {
 	// Initialize input from Body
 	let email = req.body.email;
-
+	let s = req.body.email.substring(0, req.body.email.indexOf('@'));
 	if (email === '') { // If Email is Empty
 		res.json({ error: true, message: 'Alamat Email harus di Isi' });
 	} else { // If Email not Empty
@@ -89,7 +89,7 @@ exports.create = function (req, res) {
 					}else{ // If Not exists
 						sendEmail(email); // Call sendEmail() Function
 						connection.query(
-							`INSERT INTO tb_user SET email=?, password=?, full_name='', address='', img_user='https://res.cloudinary.com/dvyonb6zt/image/upload/v1563097699/Product/toped_hfullm.png'`,
+							`INSERT INTO tb_user SET email=?, password=?, full_name='${s}', address='-', img_user='https://res.cloudinary.com/dvyonb6zt/image/upload/v1563097699/Product/toped_hfullm.png'`,
 							[email, digit],
 							function (err, rows) {
 								if (err) {
