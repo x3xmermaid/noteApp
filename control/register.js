@@ -89,7 +89,7 @@ exports.create = function (req, res) {
 					}else{ // If Not exists
 						sendEmail(email); // Call sendEmail() Function
 						connection.query(
-							`INSERT INTO tb_user SET email=?, password=?, full_name='', address='', img_user=''`,
+							`INSERT INTO tb_user SET email=?, password=?, full_name='', address='', img_user='https://res.cloudinary.com/dvyonb6zt/image/upload/v1563097699/Product/toped_hfullm.png'`,
 							[email, digit],
 							function (err, rows) {
 								if (err) {
